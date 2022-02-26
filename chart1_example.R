@@ -1,6 +1,13 @@
-x_values <- seq(1, 3)
-y_values <- seq(1,3)
+data1_chart1 <- summarize(group_by(data, state, year, total_pop)) %>% 
+  filter(state == "AK" |state == "AL" |state == "AR" |state == "AZ" |state == "CA")
 
-library(ggplot2)
-ggplot() +
-  geom_line(aes(x=x_values, y = y_values))
+data1_chart1 <- group_by(data1_chart1, year, state) %>% 
+  summarize(total_pop = sum(total_pop, na.rm = T))
+
+data1_chart1[is.na(data1_chart1)] = 0
+
+ggplot(data1_chart1) +  
+  geom_line(mapping = aes( x = year, y = total_pop, color = state))+
+  labs(title = "The total population of 5 states change over time",
+       x = "year",
+       y = "State total population")
